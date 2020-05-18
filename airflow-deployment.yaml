@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-deploy
+  labels:
+    run: airflow
+spec:
+  selector:
+    matchLabels:
+      run: airflow
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: airflow
+    spec:
+      containers:
+      - image: <your-registry>
+        name: airflow
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+       - name: airflow-secrets
+
