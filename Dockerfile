@@ -1,7 +1,5 @@
 
 FROM python:3.7
-# supervisord setup                       
-RUN apt-get update && apt-get install -y supervisor  
 USER root
 RUN apt-get update && apt-get install --yes \
     sudo \
@@ -20,7 +18,6 @@ ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 EXPOSE 8080 
-
 ENV AIRFLOW__CORE__EXECUTOR=LocalExecutor #Setting Executor to Local temporarily
 
 #Python Package Dependencies for Airflow 
