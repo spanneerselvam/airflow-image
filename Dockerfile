@@ -8,15 +8,8 @@ RUN apt-get update && apt-get install --yes \
     git \
     vim \
     cron \
-    unixodbc \
-    unixodbc-dev \
-    freetds-bin \
-    freetds-dev \
     gcc \
     g++ \
-    libffi-dev \
-    libc-dev \
-    libxml2 \
     unzip
 RUN pip install apache-airflow[1.10.10]
 RUN cd /usr/local && mkdir airflow && chmod +x airflow && cd airflow
@@ -30,10 +23,6 @@ EXPOSE 8080
 
 ENV AIRFLOW__CORE__EXECUTOR=LocalExecutor #Setting Executor to Local temporarily
 
-#SQL DRIVER Setup 
-RUN echo tdsodbc freetds/addtoodbc boolean true | debconf-set-selections
-RUN apt-get update && apt-get install tdsodbc 
-COPY /config/obdcinst.ini /etc/obdcinst.ini
 #Python Package Dependencies for Airflow 
 RUN pip install pyodbc flask-bcrypt pymssql sqlalchemy psycopg2-binary pymysql
 
