@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
   name: airflow-deploy
@@ -16,10 +16,18 @@ spec:
         run: airflow
     spec:
       containers:
-      - image: <your-registry>
-        name: airflow
+      - image: <your-image>:<tag>
         ports:
         - containerPort: 8080
+        volumeMounts:
+          - name: dags
+            mountPath: /usr/local/airflow/dags
       imagePullSecrets:
-       - name: airflow-secrets
+       - name: airflow-secret
+      volumes:
+       - name: dags
+         azureFile:
+           secretName: azure-secret
+           shareName: airflow-dags
+           readOnly: false
 
