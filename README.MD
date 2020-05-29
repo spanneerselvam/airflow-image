@@ -2,6 +2,6 @@ These are the instructions to get started with Airflow. The image is created by 
 
 1) Clone this repo on your machine.
 2) Open the Dockerfile. 
-3) Go to the config folder. Edit the airflow.cfg. Open the files id_rsa, id_rsa.pub, known_hosts, authorized_users, and gcp.json. Edit those.
-4) Once you have edited the file, you must build your image. 
+3) Go to the config folder. Edit the airflow.cfg with your SQL Database, Fernet Key, Worker Container Repository, and the Remote Logging Settings.
+4) Once you have edited the file, you must build your image. Follow instructions in this article I wrote which can be found here:
 
