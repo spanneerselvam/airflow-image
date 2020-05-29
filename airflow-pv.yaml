@@ -5,7 +5,7 @@ metadata:
   name: airflow-dags
   namespace: default
   labels:
-    usuage: airflowdev-dags
+    usuage: airflow-dags
 spec:
   capacity:
     storage: 10Gi
