@@ -10,7 +10,7 @@ spec:
     storage: 10Gi
   accessModes:
   - ReadWriteMany
-  storageClassName: airflowdiag344
+  storageClassName: sc
   persistentVolumeReclaimPolicy: Retain
   azureFile:
     secretName: azure-secret
