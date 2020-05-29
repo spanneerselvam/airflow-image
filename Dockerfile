@@ -18,30 +18,11 @@ ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 EXPOSE 8080 
-ENV AIRFLOW__CORE__EXECUTOR=LocalExecutor #Setting Executor to Local temporarily
-
 #Python Package Dependencies for Airflow 
 RUN pip install pyodbc flask-bcrypt pymssql sqlalchemy psycopg2-binary pymysql
 
 #DAGS
-RUN cd ${AIRFLOW_HOME} && mkdir dags && chmod +x -R dags
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
-#Git Setup. Add your SSH keys to the config folder
-ADD /config/id_rsa ~/.ssh/id_rsa 
-ADD /config/id_rsa.pub ~/.ssh/id_rsa.pub
-ADD /config/authorized_keys ~/.ssh/authorized_keys
-ADD /config/known_hosts ~/.ssh/known_hosts
-RUN chmod +x ~/.ssh/id_rsa
-RUN chmod +x ~/.ssh/id_rsa.pub
-RUN cd ${AIRFLOW_USER_HOME}/dags && git init && git remote add dags <insert your git repo here>
-#Cron Setup
-COPY config/git_sync /etc/cron.d/git_sync
-RUN chmod 0644 /etc/cron.d/git_sync
-COPY config/git_sync /etc/cron.d/git_sync
-RUN chmod 0644 /etc/cron.d/git_sync
-RUN crontab /etc/cron.d/git_sync
-#Testing cron job and git_sync.sh so that dags folder syncs with bitbucket repo
-RUN cd ~ && chmod +x git_sync.sh && ./git_sync.sh --yes
 
 #Remote Logging Setup
 RUN cd ${AIRFLOW_HOME} && mkdir logs && chmod +x -R logs
@@ -57,12 +38,11 @@ RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc
 RUN apt-get install gnupg -y
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg |  apt-key add -
 RUN apt-get update && apt-get install google-cloud-sdk -y
-#RUN gcloud auth activate-service-account <insert your servivce account>  --key-file=/usr/local/airflow/gcp.json --project=<your project name>
-RUN airflow run add_gcp_connection add_gcp_connection_python 2010-01-0
+RUN gcloud auth activate-service-account <insert your servivce account>  --key-file=/usr/local/airflow/gcp.json --project=<your project name>
 #Kubernetes
 RUN pip install apache-airflow[kubernetes]
 #Environmental Variables
-ENV AIRFLOW__CORE__FERNET_KEY=your_fernet_key
+ENV AIRFLOW__CORE__FERNET_KEY=<your_fernet_key>
 ENV AIRFLOW__CORE__TASK_LOG_READER=gcs.task
 ENV AIRFLOW__CORE__REMOTE_LOG_CONN_ID=AirflowGCPKey
 ENV AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER=gs://<your-gcp_bucket>/logs
