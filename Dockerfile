@@ -66,7 +66,7 @@ ENV AIRFLOW__KUBERNETES_ENVIRONMENT_VARIABLES_KUBE_CLIENT_REQUEST_TIMEOUT_SEC=50
 RUN pip install azure-mgmt-compute azure-mgmt-storage azure-mgmt-resource azure-keyvault-secrets azure-storage-blob 
 RUN pip install azure-storage-file-datalake --pre mysql-connector-python-rf
 
-#INTIALZING AIRFLOW'S DATABASE
+#INITIALIZING AIRFLOW'S DATABASE
 RUN airflow initdb
 #Supervisord
 RUN apt-get update && apt-get install -y supervisor          
